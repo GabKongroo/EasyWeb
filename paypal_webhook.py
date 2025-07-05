@@ -19,24 +19,18 @@ if os.path.exists(os.path.join(os.path.dirname(__file__), '.env')):
 def get_env_var(key, default=None):
     return os.environ.get(key, default)
 
-def get_internal_token():
-    token = get_env_var("INTERNAL_TOKEN")
-    paypal_env = get_env_var("PAYPAL_ENV", "sandbox").lower()
-    if not token and paypal_env == "live":
-        raise RuntimeError("INTERNAL_TOKEN non impostato nelle variabili di ambiente!")
-    return token
-
 def get_bot_internal_url():
     url = get_env_var("BOT_INTERNAL_URL")
     if url:
         return url
     return "http://localhost:8080"
 
+BOT_INTERNAL_URL = get_bot_internal_url()
+INTERNAL_TOKEN = get_env_var("INTERNAL_TOKEN") if get_env_var("BOT_INTERNAL_URL") else None
+
 PAYPAL_CLIENT_ID = get_env_var("PAYPAL_CLIENT_ID")
 PAYPAL_CLIENT_SECRET = get_env_var("PAYPAL_CLIENT_SECRET")
 PAYPAL_WEBHOOK_ID = get_env_var("PAYPAL_WEBHOOK_ID")
-INTERNAL_TOKEN = get_internal_token()
-BOT_INTERNAL_URL = get_bot_internal_url()
 
 # --- PAYPAL ENVIRONMENT SWITCH ---
 PAYPAL_ENV = os.environ.get("PAYPAL_ENV", "sandbox").lower()  # "sandbox" or "live"
@@ -245,5 +239,6 @@ if __name__ == "__main__":
     print(">>> [WEBHOOK] Server avviato. Webhook URL: /webhook/paypal")
     # Avvia Uvicorn in modalità produzione (no reload)
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=False)
+
 
 
