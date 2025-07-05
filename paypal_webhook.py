@@ -244,6 +244,6 @@ if __name__ == "__main__":
     import uvicorn
     print(">>> [WEBHOOK] Server avviato. Webhook URL: /webhook/paypal")
     # Avvia Uvicorn in modalità produzione (no reload)
-uvicorn.run(app, host="0.0.0.0", port=8000, reload=False)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=False)
 
 
