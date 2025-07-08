@@ -127,6 +127,12 @@ app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
+# Health check endpoint per Railway
+@app.get("/health")
+async def health_check():
+    """Endpoint per verificare lo stato dell'applicazione"""
+    return {"status": "healthy", "service": "paypal-webhook"}, 200
+
 # Endpoint di test per verificare che il webhook sia raggiungibile
 @app.get("/webhook/test")
 async def test_webhook():
